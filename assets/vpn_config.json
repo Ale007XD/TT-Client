@@ -1,0 +1,12 @@
+{
+  "remark": "DefaultServer",
+  "address": "${SERVER_IP}",
+  "port": 443,
+  "username": "${VPN_USERNAME}",
+  "password": "${VPN_PASSWORD}",
+  "dns": [
+    "8.8.8.8",
+    "1.1.1.1",
+    "9.9.9.9"
+  ]
+}
