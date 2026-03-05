@@ -12,33 +12,35 @@ class AlexTTClient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: VPNPage(),
+      debugShowCheckedModeBanner: false,
+      home: VPNHomePage(),
     );
   }
 }
 
-class VPNPage extends StatefulWidget {
-  const VPNPage({super.key});
+class VPNHomePage extends StatefulWidget {
+  const VPNHomePage({super.key});
 
   @override
-  State<VPNPage> createState() => _VPNPageState();
+  State<VPNHomePage> createState() => _VPNHomePageState();
 }
 
-class _VPNPageState extends State<VPNPage> {
+class _VPNHomePageState extends State<VPNHomePage> {
 
   final FlutterV2ray _vpn = FlutterV2ray();
+
   bool connected = false;
 
   Future<String> loadConfig() async {
-    return await rootBundle.loadString('assets/vpn_config.json');
+    return rootBundle.loadString("assets/vpn_config.json");
   }
 
-  Future<void> connect() async {
+  Future<void> connectVPN() async {
 
     final config = await loadConfig();
 
     await _vpn.startV2Ray(
-      remark: "Default",
+      remark: "DefaultServer",
       config: config,
     );
 
@@ -51,9 +53,8 @@ class _VPNPageState extends State<VPNPage> {
   void initState() {
     super.initState();
 
-    // автоподключение
     Future.delayed(const Duration(seconds: 2), () {
-      connect();
+      connectVPN();
     });
   }
 
@@ -66,8 +67,10 @@ class _VPNPageState extends State<VPNPage> {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: connect,
-          child: Text(connected ? "Connected" : "Connect"),
+          onPressed: connectVPN,
+          child: Text(
+            connected ? "VPN Connected" : "Connect VPN",
+          ),
         ),
       ),
     );
