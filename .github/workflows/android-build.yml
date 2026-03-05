@@ -1,7 +1,12 @@
 name: Android Build
 
 on:
+
   workflow_dispatch:
+
+  push:
+    branches:
+      - master
 
 jobs:
 
@@ -11,7 +16,8 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -23,14 +29,27 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.38.3
+          channel: stable
 
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Generate VPN config
+        run: |
+          sed \
+          -e "s|__SERVER__|${{ secrets.VPN_SERVER }}|g" \
+          -e "s|__DOMAIN__|${{ secrets.VPN_DOMAIN }}|g" \
+          -e "s|__USERNAME__|${{ secrets.VPN_USERNAME }}|g" \
+          -e "s|__PASSWORD__|${{ secrets.VPN_PASSWORD }}|g" \
+          assets/vpn_config_template.json > assets/vpn_config.json
+
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
       - name: Build APK
         run: flutter build apk --release
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: alex_tt_client_apk
