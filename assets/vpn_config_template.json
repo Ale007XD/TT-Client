@@ -1,0 +1,12 @@
+{
+  "remark": "DefaultServer",
+  "server": "__SERVER__",
+  "domain": "__DOMAIN__",
+  "username": "__USERNAME__",
+  "password": "__PASSWORD__",
+  "dns": [
+    "8.8.8.8",
+    "1.1.1.1",
+    "9.9.9.9"
+  ]
+}
